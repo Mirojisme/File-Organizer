@@ -1,5 +1,8 @@
 import os
 import shutil
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 
 ORIGIN = r"C:\Users\Thaid\Downloads"  # Change this to your actual Downloads folder path
@@ -13,33 +16,52 @@ FILE_TYPES = {
     "Archives": [".zip", ".rar", ".tar", ".gz"],
 }
 
-FILES = os.listdir(ORIGIN)
+def organize_files():
 
-for file in FILES:
+    FILES = os.listdir(ORIGIN)
 
-    file_path = os.path.join(ORIGIN, file)
+    for file in FILES:
 
-    if os.path.isfile(file_path):
-        file_extension = os.path.splitext(file)[1].lower()
-        moved = False
+        file_path = os.path.join(ORIGIN, file)
 
-        for category, extensions in FILE_TYPES.items():
+        if os.path.isfile(file_path):
+            file_extension = os.path.splitext(file)[1].lower()
+            moved = False
 
-            if file_extension in extensions:
-                category_folder = os.path.join(DESTINATION, category)
+            for category, extensions in FILE_TYPES.items():
 
-                if not os.path.exists(category_folder):
-                    os.makedirs(category_folder)
+                if file_extension in extensions:
+                    category_folder = os.path.join(DESTINATION, category)
 
-                shutil.move(file_path, os.path.join(category_folder, file))
-                moved = True
-                break
+                    if not os.path.exists(category_folder):
+                        os.makedirs(category_folder)
 
-        if not moved:
-            other_folder = os.path.join(DESTINATION, "Others")
+                    shutil.move(file_path, os.path.join(category_folder, file))
+                    moved = True
+                    break
 
-            if not os.path.exists(other_folder):
-                os.makedirs(other_folder)
-                
-            shutil.move(file_path, os.path.join(other_folder, file))
+            if not moved:
+                other_folder = os.path.join(DESTINATION, "Others")
 
+                if not os.path.exists(other_folder):
+                    os.makedirs(other_folder)
+
+                shutil.move(file_path, os.path.join(other_folder, file))
+
+class FileHandler(FileSystemEventHandler):
+    
+    def on_created(self, event):
+        if not event.is_directory:
+            print(f"New file detected: {event.src_path}")
+            organize_files()
+
+observer = Observer()
+observer.schedule(FileHandler(), ORIGIN, recursive=False)
+try:
+    observer.start()
+    print("Monitoring started. Press Ctrl+C to stop.")
+    while True:
+        print("Monitoring...")
+        time.sleep(10)
+except KeyboardInterrupt:
+    observer.stop()
