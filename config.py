@@ -8,3 +8,11 @@ FILE_TYPES = {
     "Music": [".mp3", ".wav", ".flac"],
     "Archives": [".zip", ".rar", ".tar", ".gz", ".7z"],
 }
+
+
+IGNORED_EXTENSIONS = [
+    ".tmp",  # Temporary files
+    ".part",  # Partially downloaded files
+    ".crdownload",  # Chrome incomplete downloads
+    ".download",  # Other incomplete downloads
+]
