@@ -12,8 +12,8 @@ def organize_files():
         file_path = os.path.join(ORIGIN, file)
 
         if os.path.isfile(file_path):
-            name = os.path.splitext(file)[0]
-            file_extension = os.path.splitext(file)[1].lower()
+            name, file_extension = os.path.splitext(file)
+            file_extension = file_extension.lower()
             if file_extension in IGNORED_EXTENSIONS:
                 continue
             moved = False
@@ -39,7 +39,7 @@ def organize_files():
                     else:
                         shutil.move(file_path, os.path.join(category_folder, file))
                     '''
-                    
+                    shutil.move(file_path, file_destination_path)
                     '''
                     moved = True
                     print(f"Moved '{file}' to '{category_folder}'")
