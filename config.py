@@ -6,5 +6,5 @@ FILE_TYPES = {
     "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".pptx"],
     "Videos": [".mp4", ".mov", ".avi", ".mkv"],
     "Music": [".mp3", ".wav", ".flac"],
-    "Archives": [".zip", ".rar", ".tar", ".gz"],
+    "Archives": [".zip", ".rar", ".tar", ".gz", ".7z"],
 }
