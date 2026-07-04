@@ -46,7 +46,7 @@ def organize_files():
                     break
                     
             
-            '''
+            
             if not moved:
                 other_folder = os.path.join(DESTINATION, "Others")
 
@@ -55,4 +55,4 @@ def organize_files():
 
                 shutil.move(file_path, os.path.join(other_folder, file))
                 print(f"Moved '{file}' to '{other_folder}'")
-            '''
+            
