@@ -12,8 +12,7 @@ def organize_files():
         file_path = os.path.join(ORIGIN, file)
 
         if os.path.isfile(file_path):
-            name, file_extension = os.path.splitext(file)
-            file_extension = file_extension.lower()
+            file_extension = os.path.splitext(file)[1].lower()
             if file_extension in IGNORED_EXTENSIONS:
                 continue
             moved = False
@@ -29,18 +28,11 @@ def organize_files():
                     
                     if os.path.exists(file_destination_path):
                         print(f"'{file}' already exists")
-                        counter = 1
-                        while os.path.exists(file_destination_path):
-                            new_file_name = f"{name}_{counter}{file_extension}"
-                            file_destination_path = os.path.join(category_folder, new_file_name)
-                            counter += 1
+                        file_destination_path = unique_file_name(category_folder, file)
 
-                        shutil.move(file_path, file_destination_path)
-                    else:
-                        shutil.move(file_path, os.path.join(category_folder, file))
-                    '''
+                        
                     shutil.move(file_path, file_destination_path)
-                    '''
+                    
                     moved = True
                     print(f"Moved '{file}' to '{category_folder}'")
                     break
@@ -56,3 +48,15 @@ def organize_files():
                 shutil.move(file_path, os.path.join(other_folder, file))
                 print(f"Moved '{file}' to '{other_folder}'")
             
+
+def unique_file_name(destination_path, filename):
+    name, extension = os.path.splitext(filename)
+    destination = os.path.join(destination_path, filename)
+    
+    counter = 1
+    while os.path.exists(destination):
+        new_file_name = f"{name}_{counter}{extension}"
+        destination = os.path.join(destination_path, new_file_name)
+        counter += 1
+    
+    return destination
