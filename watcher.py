@@ -1,5 +1,6 @@
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+import time
 
 from organize import organize_files, ORIGIN
 
